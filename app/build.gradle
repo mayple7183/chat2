@@ -1,0 +1,33 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'kr.wooritalk.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'kr.wooritalk.app'
+        minSdk 28
+        targetSdk 35
+        versionCode 182
+        versionName '1.8.2'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'com.google.firebase:firebase-messaging:24.1.0'
+    implementation 'androidx.core:core:1.13.1'
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "952259191488",
+    "project_id": "woori-talk",
+    "storage_bucket": "woori-talk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952259191488:android:0c8ce4dc4149dc27384325",
+        "android_client_info": {
+          "package_name": "kr.wooritalk.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCU6ubacTQ8umK8Tyqhxl8OvGAGCO5ZJOQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
