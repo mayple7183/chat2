@@ -29,6 +29,10 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -68,6 +72,16 @@ public class MainActivity extends Activity {
         FrameLayout.LayoutParams pp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, 6);
         root.addView(progress, pp);
         setContentView(root);
+
+        // Android 15+ edge-to-edge 환경에서 WebView 하단 메뉴가
+        // 시스템 홈/뒤로가기(내비게이션) 영역 뒤에 가려지지 않도록 여백 적용
+        ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
+            Insets nav = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            v.setPadding(0, 0, 0, nav.bottom);
+            return insets;
+        });
+        ViewCompat.requestApplyInsets(root);
+
         configureWebView();
         fetchFirebaseConfigAndToken();
         String path = getIntent().getStringExtra("path");
@@ -83,7 +97,7 @@ public class MainActivity extends Activity {
         s.setAllowContentAccess(true);
         s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         s.setMediaPlaybackRequiresUserGesture(false);
-        s.setUserAgentString(s.getUserAgentString()+" WooriTalkAndroid/1.8.1");
+        s.setUserAgentString(s.getUserAgentString()+" WooriTalkAndroid/1.8.3");
         if (Build.VERSION.SDK_INT >= 26) s.setSafeBrowsingEnabled(true);
         CookieManager.getInstance().setAcceptCookie(true);
         CookieManager.getInstance().setAcceptThirdPartyCookies(webView, false);
@@ -208,6 +222,6 @@ public class MainActivity extends Activity {
         }
         @JavascriptInterface public void disableNotifications(){WooriApp.prefs(MainActivity.this).edit().putBoolean("notifications_enabled",false).apply();}
         @JavascriptInterface public void showLocalNotification(String title,String body){if(!isNotificationsEnabled())return;runOnUiThread(()->NotificationHelper.show(MainActivity.this,title,body,"/"));}
-        @JavascriptInterface public String getAppVersion(){return "1.8.2";}
+        @JavascriptInterface public String getAppVersion(){return "1.8.3";}
     }
 }
