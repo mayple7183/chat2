@@ -1,4 +1,4 @@
-name: Build Android APK 1.8.2
+name: Build Android APK 1.8.2 FIXED
 
 on:
   workflow_dispatch:
@@ -30,15 +30,38 @@ jobs:
             "platforms;android-35" \
             "build-tools;35.0.0"
 
-      - name: Enable AndroidX
+      - name: Show project files
         run: |
-          printf "android.useAndroidX=true\nandroid.enableJetifier=true\n" > gradle.properties
-          echo "===== gradle.properties ====="
+          pwd
+          ls -la
+          echo "===== gradle.properties BEFORE ====="
+          cat gradle.properties || true
+
+      - name: Force AndroidX
+        run: |
+          echo "android.useAndroidX=true" > gradle.properties
+          echo "android.enableJetifier=true" >> gradle.properties
+          mkdir -p "$HOME/.gradle"
+          echo "android.useAndroidX=true" > "$HOME/.gradle/gradle.properties"
+          echo "android.enableJetifier=true" >> "$HOME/.gradle/gradle.properties"
+          echo "===== PROJECT gradle.properties ====="
           cat gradle.properties
+          echo "===== HOME gradle.properties ====="
+          cat "$HOME/.gradle/gradle.properties"
 
       - name: Build APK
         run: |
-          gradle :app:assembleDebug --no-daemon --stacktrace
+          gradle \
+            -Pandroid.useAndroidX=true \
+            -Pandroid.enableJetifier=true \
+            :app:assembleDebug \
+            --no-daemon \
+            --stacktrace
+
+      - name: Check APK
+        run: |
+          ls -lh app/build/outputs/apk/debug/
+          test -f app/build/outputs/apk/debug/app-debug.apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
